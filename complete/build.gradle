@@ -1,36 +1,27 @@
 apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'application'
 
-mainClassName = 'hello.HelloWorld'
+defaultTasks 'jar'
 
-sourceSets.main.java.srcDirs = ['src']
-
-// tag::repositories[]
-repositories { 
-    mavenCentral() 
-}
-// end::repositories[]
-
-// tag::jar[]
-jar {
-    baseName = 'gs-gradle'
-    version =  '0.1.0'
-	 manifest {
+jar {   
+    manifest {
         attributes 'Main-Class': 'hello.HelloWorld'
     }
 }
-// end::jar[]
 
-// tag::dependencies[]
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+
+sourceCompatibility = '1.8'
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+if (!hasProperty('mainClass')) {
+    ext.mainClass = 'com.stormtrident.StormTrident'
+}
+
+repositories {
+    mavenCentral()
+}
 
 dependencies {
-    compile "joda-time:joda-time:2.2"
-    testCompile "junit:junit:4.12"
+    //---apache storm
+    compile 'org.apache.storm:storm-core:1.0.0'  //compile 
+    testCompile group: 'junit', name: 'junit', version: '4.10'
 }
-// end::dependencies[]
-
-// tag::wrapper[]
-// end::wrapper[]
